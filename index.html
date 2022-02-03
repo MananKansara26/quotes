@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotes</title>
+    <style>
+        body{
+            margin: 0px;
+            padding: 0px;
+        }
+        div{
+            /* border: 2px solid black; */
+        }
+        div.main{
+            position: relative;
+            margin-top: 12.5vh;
+            margin-left: 15vw;
+            width: 70vw;
+            height: 70vh;
+            padding-top: 5vh;
+            background-color:  rgb(230, 205, 233);
+            border-radius: 3vw;
+        }
+        div#quotes{
+            position: absolute;
+            margin-top: 5vh;
+            min-height: 30vh;
+            overflow: hidden;
+            font-family: cursive;
+            font-size: 2rem;
+            padding: 2vw 3vw;
+        }
+        div#author{
+            position: absolute;
+            font-family: cursive;
+            font-size: 1.5rem;
+            margin-top: 43vh;
+            margin-left: 50vw;
+            margin-right: 3vw;
+            min-height: 10vh;
+        }
+        button{
+            position: absolute;
+            width: 40vw;
+            height: 5vh;
+            font-size: 1.5rem;
+            font-family: cursive;
+            margin-left: 15vw;
+            margin-right: 15vw;
+            background-color: rgb(241, 238, 11);
+        }
+        button#newQuotes{
+            margin-top: 54vh;
+        }
+        button#tweetMe{
+            margin-top: 61.5vh;
+        }
+
+        @media screen and (max-width: 600px) {
+        body{
+            padding: 0px;
+            margin: 0px;
+            background-color:  rgb(230, 205, 233);
+        }
+        div{
+            /* border: 2px solid black; */
+        }
+        div.main{
+            position: relative;
+            margin: 0px;
+            width: 100vw;
+            height: 100vh;
+        }
+        div#quotes{
+            position: absolute;
+            margin-top: 5vh;
+            min-height: 45vh;
+            overflow: hidden;
+            font-family: cursive;
+            font-size: 1.8rem;
+            padding: 2vw 3vw;
+        }
+        div#author{
+            position: absolute;
+            font-family: cursive;
+            font-size: 1.3rem;
+            margin-top: 55vh;
+            margin-left: 50vw;
+            margin-right: 3vw;
+            min-height: 10vh;
+        }
+        button{
+            position: absolute;
+            width: 40vw;
+            height: 5vh;
+            font-size: 1.5rem;
+            font-family: cursive;
+            margin-left: 30vw;
+            margin-right: 30vw;
+            background-color: rgb(241, 238, 11);
+            border-radius: 3vw;
+        }
+        button#newQuotes{
+            margin-top: 73vh;
+        }
+        button#tweetMe{
+            margin-top: 81.5vh;
+        }
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div id="quotes"> </div>
+        <div id="author"></div>
+        <button id="newQuotes">New Quotes</button>
+        <button id="tweetMe">Tweet</button> 
+    </div>
+
+    <script>
+        const quotes = document.getElementById("quotes");
+        const author = document.getElementById("author");
+        let realData="";
+        var num;
+
+        const getNewQuotes = () => {
+            num = Math.floor(Math.random()*1000);
+            // console.log(realData[num].author);
+            quotes.innerHTML = `&quot;${realData[num].text}&quot;`;
+            if(realData[num].author == null )
+            {
+                author.innerText = "Unkown Author";
+            }
+            else
+            {
+                author.innerText = `${realData[num].author}`;
+            }
+        };
+
+        const tweetNow = () => {
+            // https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/guides/web-intent 
+            // https://twitter.com/intent/tweet to go to the twitter and open post
+            let tweetPost = `https://twitter.com/intent/tweet?text=${realData[num].text}`;
+            window.open(tweetPost);
+            console.log("lestening ")
+        };
+
+        
+
+        const getQuotes = async() => {
+            const api = "https://type.fit/api/quotes";
+            try{
+                let data = await fetch(api); // wait untill its data is not get 
+                realData = await data.json(); // await is for asyncronouse 
+                // console.log(realData); 
+                // console.log(realData[0].text);
+                // console.log(realData[0].author); 
+                // console.log(realData.length); 
+
+                getNewQuotes();
+            }catch (error) {}
+        };
+
+        getQuotes();
+        document.getElementById("newQuotes").addEventListener("click", getNewQuotes);
+        document.getElementById("tweetMe").addEventListener("click", tweetNow);
+
+    </script>
+</body>
+</html>
